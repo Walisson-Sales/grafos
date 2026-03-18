@@ -1,0 +1,18 @@
+# Arquivos compilados (Java)
+*.class
+*.log
+*.jar
+*.war
+
+# IntelliJ IDEA (Configurações locais)
+.idea/
+*.iml
+*.iws
+out/
+
+# Gradle (Arquivos de build)
+.gradle/
+build/
+
+# Mac (Caso abra no futuro)
+.DS_Store
