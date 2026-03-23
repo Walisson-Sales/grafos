@@ -2,7 +2,14 @@ package org.example;
 
 public class Vertice {
     private String nome;
-    private int valor;
+    //private int valor;
+
+    // Nõa trabalho mais com valor, só nome.
+
+    // Construtor
+    public Vertice(String nome){
+        this.nome = nome;
+    }
 
     public String getNome() {
         return nome;
@@ -12,16 +19,16 @@ public class Vertice {
     };
 
     //Valor:
-    public int getValor() {
-        return valor;
-    }
+    //public int getValor() {
+    //    return valor;
+    //}
 
-    public void setValor(int valor) {
-        this.valor = valor;
-    }
+    //public void setValor(int valor) {
+    //    this.valor = valor;
+    //}
 
     @Override
     public String toString() {
-        return this.nome + ": " + this.valor;
+        return this.nome;
     }
 }

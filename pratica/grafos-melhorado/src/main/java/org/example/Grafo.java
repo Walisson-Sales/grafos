@@ -8,6 +8,21 @@ public class Grafo {
     private List<Vertice> vertices = new ArrayList<>();
     private List<Aresta> arestas = new ArrayList<>();
 
+    // Alterar para não precisar mandar uma lista de vertices e arestas;
+    //mas sim criar a lista aqui e ir adicioanndo;
+
+    // Construtor:
+    public Grafo(){
+        vertices = new ArrayList<>();
+        arestas = new ArrayList<>();
+    } // Apenas para iniciar as listas
+
+    // Adicionando vertices na lista:
+    public void addVertice(String nome){
+        Vertice vertice = new Vertice(nome);
+        vertices.add(vertice);
+    }
+
     // Vertices:
     public List<Vertice> getVertices(){
         return vertices;

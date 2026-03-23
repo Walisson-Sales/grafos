@@ -7,32 +7,32 @@ import java.util.List;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     static void main() {
+        // Tarefa de hoje:
+        /*
+            Melhorar o código (usar construtores) - feito;
+            Guardar a direção;
+
+            Conseguir inferir/descobrir se o gráfico é dirigido/direcionado ou não
+
+            com selfloop para verificar:
+            se receber uma aresta que liga o mesmo gráfico
+            ou uma que vai de a pra b e outra que vem de b pra a
+        */
+
         // Criando os objetos de vertices:
-        Vertice vertice1 = new Vertice();
-        Vertice vertice2 = new Vertice();
-
-        // Atribuindo valores aos vertices:
-        vertice1.setNome("V1");
-        vertice1.setValor(10);
-
-        vertice2.setNome("V2");
-        vertice2.setValor(20);
+        Vertice vertice1 = new Vertice("V1");
+        Vertice vertice2 = new Vertice("v2");
 
         System.out.println("=========================================================================");
         System.out.println("Vertice 1:");
-        System.out.println("Nome: " + vertice1.getNome() + ", Valor: " + vertice1.getValor());
+        System.out.println("Nome: " + vertice1.getNome());
 
         System.out.println("Vertice 2:");
-        System.out.println("Nome: " + vertice2.getNome() + ", Valor: " + vertice2.getValor());
+        System.out.println("Nome: " + vertice2.getNome());
         // ==============================================================================
 
         // Criando os objetos de arestas:
-        Aresta aresta1 = new Aresta();
-
-        // Atribuindo valor às arestas:
-        aresta1.setNome("A");
-        aresta1.setVertice1(vertice1);
-        aresta1.setVertice2(vertice2);
+        Aresta aresta1 = new Aresta(vertice1, vertice2, "A");
 
         System.out.println("=========================================================================");
         System.out.println("Nome: " + aresta1.getNome() + ", Vertice1: " + aresta1.getVertice1() + ", Vertice2: " +
@@ -44,10 +44,8 @@ public class Main {
         Grafo grafo = new Grafo();
 
         // Atribuindo valor dos vertices do grafo
-        List<Vertice> vertices = new ArrayList<>();
-        vertices.add(vertice1);
-        vertices.add(vertice2);
-        grafo.setVertices(vertices);
+        grafo.addVertice(vertice1.getNome()); //Agora da pra passar o nome direto também
+        grafo.addVertice(vertice2.getNome());
 
         // Atribuindo valor às arestas do grafo:
         List<Aresta> arestas = new ArrayList<>();

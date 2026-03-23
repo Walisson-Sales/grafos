@@ -5,6 +5,17 @@ public class Aresta {
     private Vertice vertice2;
     private String nome;
 
+    // Construtor:
+    public Aresta(Vertice v1, Vertice v2, String nome){
+        this.vertice1 = v1;
+        this.vertice2 = v2;
+        this.nome = nome;
+    }
+    public Aresta(Vertice v1, Vertice v2){
+        this.vertice1 = v1;
+        this.vertice2 = v2;
+    } // Sobreposisão de construtores pra caso tenha aresta sem nome.
+
     // Vertice 1:
     public Vertice getVertice1() {
         return vertice1;
