@@ -21,5 +21,9 @@ public class Main {
         grafo.verificaCaminho("1", "4");
         grafo.calculaComprimento("1", "5");
         System.out.println("------------------------");
+        System.out.println("DSF:");
+        grafo.dfsWithoutRecursion("1", "5");
+        System.out.println("\nDSF COM RESCURSIVIDADE:");
+        grafo.dfsWithRecursion("1","4");
     }
 }

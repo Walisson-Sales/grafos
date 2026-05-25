@@ -498,6 +498,136 @@ public class Grafo {
 
     // Obs: Atentar para as diferenças quando os grafos são dígrafos ou não
 
+    // ------------------------------------------------------------------------------------
+    // Método 1:
+    // todo:
+    //    1- Ajustar argumentos para String origem e String destino
+    //    2- Considere realizar uma caminhada quando não há destino informado
+    //    3- Reveja o retorno do métod0 para algo que faça mais sentido
+    //    4- Printe o percurso que está sendo feito
+    public List<String> dfsWithoutRecursion(String start, String end) {
+//        current = atual
+        // LEMBRANDO:
+        // vou passar o NOME do vértice no start
+        // coisa como: A, B, C - não número do vértice.
+
+        // Criação das variáveis
+        Stack<String> stack = new Stack<String>();
+        Set<String> isVisited = new HashSet<>(); // deixou de ser uma lista de boolean e passou a ser um set, para trabalhar com Strings
+        stack.push(start);
+        List<String> caminhoPercorrido = new ArrayList<>(); // usado no retorno
+
+        // lógica:
+        System.out.println("Construção do percurso:");
+        while (!stack.isEmpty()) {
+            String current = stack.pop();
+            if (isVisited.contains(current)) {
+                continue;
+            }
+            isVisited.add(current);
+
+            System.out.print(current + ", ");
+            caminhoPercorrido.add(current);
+
+            if (end != null && !end.isEmpty() && current.equals(end)) {
+                System.out.println("Destino '" + end + "' encontrado! Busca encerrada.");
+                System.out.println(caminhoPercorrido);
+                return caminhoPercorrido;
+            }
+
+            Vertice verticeAtual = encontraVertice(current).orElseThrow(
+                    () -> new IllegalArgumentException("Vertice " + current + " não encontrado."));
+            for (Vertice dest : verticeAtual.getAdjacencias()) {
+                // dest = destino, eu acho
+                if (!isVisited.contains(dest.getNome()))
+                    stack.push(dest.getNome());
+            }
+        }
+        // Retorna lista vazia quando não há caminho possível até o destino
+        if (end != null && !end.isEmpty()) {
+            System.out.println("\nDestino '" + end + "' inalcançável a partir de " + start );
+            return new ArrayList<>();
+        }
+
+        // Caminhada completa
+        System.out.println("Caminhada completa finalizada");
+        System.out.println(caminhoPercorrido);
+        return caminhoPercorrido;
+    }
+
+    // Sobrecarga do métod0 para deixar o end como opcional
+    public List<String> dfsWithoutRecursion(String start) {
+        // usando recursividade, passando só o start e deixando o end vazio.
+        return dfsWithoutRecursion(start, "");
+    }
+    // pra resolver o problema do get (no for) eu primeiro pesquisei se tinha outra forma de fazer isso, vi que não tinha.
+    // depois tentei descobrir a posição do current pra então passar a posição do no get(), mas recebi outro erro.
+    // Com ajuda da ia vi que era só pegar a lista de adjacência do objeto current
+
+    // Método 2:
+    // todo:
+    //    1- Ajustar argumentos para String origem e String destino
+    //    2- Considere realizar uma caminhada quando não há destino informado
+    //    3- Reveja o retorno do métod0 para algo que faça mais sentido
+    //    4- Printe o percurso que está sendo feito
+
+    private boolean dfsRecursive(String current, String end, Set<String> isVisited, List<String> caminhoPercorrido) {
+        isVisited.add(current);
+        caminhoPercorrido.add(current);
+        System.out.print(current + ", ");
+        // Verifica se chegou no destino (end)
+        if (end != null && !end.isEmpty() && current.equals(end)) {
+            return true;
+        }
+
+        // Pegando o vértice através do nome passado em current
+        Vertice verticeAtual = encontraVertice(current).orElseThrow(
+                () -> new IllegalArgumentException("Vertice " + current + " não encontrado."));
+
+        // Explora os vizinhos do vértice atual
+        for (Vertice dest : verticeAtual.getAdjacencias()) {
+            if (!isVisited.contains(dest.getNome())) {
+                boolean achouLaNoFundo = dfsRecursive(dest.getNome(), end, isVisited, caminhoPercorrido);
+                if (achouLaNoFundo) {
+                    return true;
+                }
+            }
+        }
+        // se não achou o destino, retorna falso:
+        return false;
+    }
+    public List<String> dfsWithRecursion(String start, String end) {
+        Set<String> isVisited = new HashSet<>();
+        List<String> caminhoPercorrido = new ArrayList<>();
+
+        System.out.println("Construção do percurso:");
+
+        boolean achouDestino = dfsRecursive(start, end, isVisited, caminhoPercorrido);
+
+        // Lida com a resposta
+        if (end != null && !end.isEmpty()) {
+            if (achouDestino) {
+                System.out.println("\nDestino " + end + " encontrado! Busca encerrada.");
+            } else {
+                System.out.println("\nDestino " + end + " inalcançável a partir de '" + start);
+                return new ArrayList<>(); // Retorna lista vazia se falhou
+            }
+        } else {
+            System.out.println("\nCaminhada completa finalizada");
+        }
+
+        //retornando o caminho percorrido:
+        System.out.println(caminhoPercorrido);
+        return caminhoPercorrido;
+    }
+
+    // sobrecarga para quando não é passado um destino
+    public List<String> dfsWithRecursion(String start) {
+        return dfsWithRecursion(start, "");
+    }
+
+    // ------------------------------------------------------------------------------------
+
     @Override
     public String toString() {
         return """
