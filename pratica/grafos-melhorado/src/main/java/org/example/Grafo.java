@@ -394,6 +394,110 @@ public class Grafo {
         }
     }
 
+    // ------------------------------------------------------------------------------------
+
+    //todo: 1- Verificação da existência de caminho simples
+    // Isto é, se x é a alcançável a partir de y
+    public void verificaCaminho(String nomeOrigem, String nomeDestino){
+        // 1 ideia - pensava que precisava percorrer todas as arestas, daí vi que era impossível para grafos maiores.
+        // E tentei passar os vértices direto
+        /*
+        for(Aresta aresta : arestas){
+            boolean achou = aresta.getVerticeDestino().equals(verticeDestino);
+            if(achou){
+                System.out.println("VOCÊ ACHOU!!");
+            }
+        }
+         */
+        // 2 ideia - usar a lista de adjacências (com ajuda de ia):
+        // Encontrando os vértices pelo nome (sem passar os objetos vértice)
+        Vertice verticeOrigem = encontraVertice(nomeOrigem).orElseThrow(
+                () -> new IllegalArgumentException("Vertice " + nomeOrigem + " não encontrado."));
+        Vertice verticeDestino = encontraVertice(nomeDestino).orElseThrow(
+                () -> new IllegalArgumentException("Vertice " + nomeDestino + " não encontrado."));
+        // Iniciando as listas
+        List<Vertice> visitas = new ArrayList<>();
+        List<Vertice> proximosAVisitar = new ArrayList<>();
+        proximosAVisitar.add(verticeOrigem); // Que é o primeiro vértice da busca
+        while(!proximosAVisitar.isEmpty()){
+            Vertice verticeAtual = proximosAVisitar.remove(0); // faz ele ir para o próximo vértice
+
+            boolean achou = verticeAtual.equals(verticeDestino);
+            if(achou){
+                System.out.println("VOCÊ ACHOU!!");
+                return;
+            }
+
+            visitas.add(verticeAtual);
+            for (Vertice proximoVertice : verticeAtual.getAdjacencias()){ // Verificação de caminho simples
+                if(!visitas.contains(proximoVertice) && !proximosAVisitar.contains(proximoVertice)){
+                    proximosAVisitar.add(proximoVertice);
+                }
+            }
+        }
+        System.out.println("Sem caminho para este vértice!");
+    }
+
+    /*
+        Linha de raciocínio:
+            *5*, 7
+             7 , 4
+             4 , 1
+             1 ,*2*
+        (o último vértice é igual o 1º da próxima aresta)
+        Vertice de destino é a parada do loop
+        SEMPRE o start é o vértice de origem (por isso não precisa passar por todas as arestas)
+
+     */
+
+    //todo: 2- Cálculo do comprimento do caminho
+    // OBS: diferenciar o cálculo de acordo com o tipo de grafo (ponderado ou não)
+    //Nesta segunda parte da tarefa eu usei mais inteligência artificial.
+    public void calculaComprimento(String nomeOrigem, String nomeDestino) {
+        Vertice origem = encontraVertice(nomeOrigem).orElseThrow(
+                () -> new IllegalArgumentException("Vertice " + nomeOrigem + " não encontrado."));
+        Vertice destino = encontraVertice(nomeDestino).orElseThrow(
+                () -> new IllegalArgumentException("Vertice " + nomeDestino + " não encontrado."));
+
+        List<Vertice> proximosAVisitar = new ArrayList<>();
+        Map<Vertice, Double> distanciasAcumuladas = new HashMap<>();
+
+        proximosAVisitar.add(origem);
+        distanciasAcumuladas.put(origem, 0.0);
+
+        while (!proximosAVisitar.isEmpty()) {
+            Vertice atual = proximosAVisitar.remove(0);
+
+            if (atual.equals(destino)) {
+                System.out.println("Comprimento total: " + distanciasAcumuladas.get(atual));
+                return;
+            }
+            for (Aresta aresta : this.arestas) {
+                Vertice vizinho = null;
+
+                if (aresta.getVerticeOrigem().equals(atual)) {
+                    vizinho = aresta.getVerticeDestino();
+                }
+
+                else if (!this.eDirigido && aresta.getVerticeDestino().equals(atual)) {
+                    vizinho = aresta.getVerticeOrigem();
+                }
+
+                if (vizinho != null && !distanciasAcumuladas.containsKey(vizinho)) {
+                    double custoAteAqui = distanciasAcumuladas.get(atual);
+
+                    double pesoAresta = aresta.getPeso();
+
+                    distanciasAcumuladas.put(vizinho, custoAteAqui + pesoAresta);
+                    proximosAVisitar.add(vizinho);
+                }
+            }
+        }
+        System.out.println("Sem caminho para este vértice!");
+    }
+
+    // Obs: Atentar para as diferenças quando os grafos são dígrafos ou não
+
     @Override
     public String toString() {
         return """

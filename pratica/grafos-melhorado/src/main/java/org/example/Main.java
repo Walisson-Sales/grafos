@@ -16,5 +16,10 @@ public class Main {
         grafo.exibeMatrizAdjacenciaCORRIGIDO();
         System.out.println("------------------------");
         grafo.exibeMatrizIncidencia();
+        System.out.println();
+        System.out.println("CAMINHOS:");
+        grafo.verificaCaminho("1", "4");
+        grafo.calculaComprimento("1", "5");
+        System.out.println("------------------------");
     }
 }
