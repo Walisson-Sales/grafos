@@ -1,47 +1,44 @@
 package org.example;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@AllArgsConstructor
+@Setter
+@Getter
 public class Aresta {
+    private String nome;
     private Vertice verticeOrigem;
     private Vertice verticeDestino;
-    private String nome;
+    private double peso;
 
-    // Construtor:
-    public Aresta(Vertice v1, Vertice v2, String nome){
+    //Construtor para arestas sem nome e sem peso
+    public Aresta(Vertice v1, Vertice v2) {
         this.verticeOrigem = v1;
         this.verticeDestino = v2;
-        this.nome = nome;
+        this.peso = 1.0;
     }
-    public Aresta(Vertice v1, Vertice v2){
+
+    // Construtor para arestas sem peso
+    public Aresta(String nome, Vertice v1, Vertice v2) {
+        this.nome = nome;
         this.verticeOrigem = v1;
         this.verticeDestino = v2;
-    } // Sobreposisão de construtores pra caso tenha aresta sem nome.
-
-    // Vertice 1:
-    public Vertice getVerticeOrigem() {
-        return verticeOrigem;
-    }
-    public void setVerticeOrigem(Vertice verticeOrigem) {
-        this.verticeOrigem = verticeOrigem;
+        this.peso = 1.0;
     }
 
-    // Vertice 2:
-    public Vertice getVerticeDestino() {
-        return verticeDestino;
-    }
-    public void setVerticeDestino(Vertice verticeDestino) {
-        this.verticeDestino = verticeDestino;
-    }
-
-    // Nome:
-    public String getNome() {
-        return nome;
-    }
-    public void setNome(String nome) {
-        this.nome = nome;
+    // Construtor para arestas com peso e sem nome
+    public Aresta(Vertice v1, Vertice v2, double peso) {
+        this.verticeOrigem = v1;
+        this.verticeDestino = v2;
+        this.peso = peso;
     }
 
     @Override
     public String toString() {
-        return "Aresta " + this.nome + " (" + this.verticeOrigem.getNome() + " -> " + this.verticeDestino.getNome() + ")";
+        String nomeAresta = nome != null ? nome : "";
+        return "\n" + nomeAresta + "{" + verticeOrigem.getNome() + "," + verticeDestino.getNome() + "}";
     }
 }
