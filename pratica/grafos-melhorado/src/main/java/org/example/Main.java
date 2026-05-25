@@ -15,5 +15,6 @@ public class Main {
         System.out.println("MATRIZES:");
         grafo.exibeMatrizAdjacenciaCORRIGIDO();
         System.out.println("------------------------");
+        grafo.exibeMatrizIncidencia();
     }
 }

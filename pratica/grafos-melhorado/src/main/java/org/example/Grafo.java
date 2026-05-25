@@ -317,6 +317,83 @@ public class Grafo {
 
     }
 
+    public void exibeMatrizIncidencia(){
+        //1º Colocando a lista de Vertices em ordem para o cabeçalho:
+        String listaVertices = vertices.toString();
+        String[] partes = listaVertices.replace("[", "").replace("]", "").split(", ");
+        Arrays.sort(partes);
+        String verticesOrdenados = Arrays.toString(partes);
+        String[] teste = verticesOrdenados.replace("[", "").replace("]", "").split(", ");
+
+        // 2º Iniciaindo a matriz com valores 0:
+        //Criando a matriz:
+        int[][] matriz = new int[ordem][tamanho];
+        // Iniciando com 0:
+        for(int i = 0; i < ordem; i++ ){
+            for(int j = 0; j < tamanho; j++){
+                matriz[i][j] = 0;
+            }
+        }
+
+        // 3º Preenchendo a matriz:
+        // todo: Comparar as linhas com os vértices e as colunas com as arestas
+        for(int coluna = 0; coluna < tamanho; coluna++) {
+
+            Aresta arestaAtual = arestas.get(coluna);
+
+            String nomeOrigem = arestaAtual.getVerticeOrigem().getNome();
+            String nomeDestino = arestaAtual.getVerticeDestino().getNome();
+
+            // Acha a LINHA do vértice de ORIGEM
+            int linhaOrigem = -1;
+            for(int i = 0; i < ordem; i++) {
+                if(teste[i].equals(nomeOrigem)) {
+                    linhaOrigem = i; break;
+                }
+            }
+
+            // Acha a LINHA do vértice de DESTINO
+            int linhaDestino = -1;
+            for(int i = 0; i < ordem; i++) {
+                if(teste[i].equals(nomeDestino)) {
+                    linhaDestino = i; break;
+                }
+            }
+
+            // Preenchendo a coluna atual da matriz
+            if (linhaOrigem != -1 && linhaDestino != -1) {
+                if (!eDirigido){
+                    matriz[linhaOrigem][coluna] = 1;
+                    matriz[linhaDestino][coluna] = 1;
+                }
+                else{
+                    if (linhaOrigem == linhaDestino) {
+                        matriz[linhaOrigem][coluna] = 2; // self-loop
+                    } else {
+                        matriz[linhaOrigem][coluna] = -1;  // Saida
+                        matriz[linhaDestino][coluna] = 1; // Entrada
+                    }
+                }
+
+            }
+        }
+
+        // 4º Imprimindo a matriz:
+        System.out.println("Matriz de Incidência:");
+        System.out.print("    "); // Deixando um espaço no cabeçalho
+        for (int j = 0; j < tamanho; j++) {
+            System.out.printf(" e%d ", (j + 1)); // Cabeçalho das colunas
+        }
+        System.out.println();
+        for(int i = 0; i < ordem; i++ ){
+            System.out.printf("%2s |", teste[i]); // Cabeçalho das linhas
+            for(int j = 0; j < tamanho; j++){
+                System.out.printf(" %2d ", matriz[i][j]);
+            }
+            System.out.println();
+        }
+    }
+
     @Override
     public String toString() {
         return """
