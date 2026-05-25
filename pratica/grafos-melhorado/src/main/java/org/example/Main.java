@@ -35,8 +35,8 @@ public class Main {
         Aresta aresta1 = new Aresta(vertice1, vertice2, "A");
 
         System.out.println("=========================================================================");
-        System.out.println("Nome: " + aresta1.getNome() + ", Vertice1: " + aresta1.getVertice1() + ", Vertice2: " +
-                aresta1.getVertice2()); // Ver a parte do retorno dos vertices depois;
+        System.out.println("Nome: " + aresta1.getNome() + ", Vertice1: " + aresta1.getVerticeOrigem() + ", Vertice2: " +
+                aresta1.getVerticeDestino()); // Ver a parte do retorno dos vertices depois;
 
         // ==============================================================================
 
