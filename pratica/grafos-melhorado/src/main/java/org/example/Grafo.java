@@ -628,6 +628,53 @@ public class Grafo {
 
     // ------------------------------------------------------------------------------------
 
+    // Implementação do método para descobrir se o grafo é conexo ou não:
+
+    public boolean descobreConexo(String start){
+        //todo: Primeiro verificar se há atalhos para saber se o vértice é conexo ou não
+        // todo: Fazer a caminhada no grafo e ver se a quantidade de vértices é igual a quantidade percorrida
+
+        //Atalhos:
+        // vertices isolados, se NÃO manda ou NÃO recebe de alguém;
+
+        //1º verifica se o vértice existe
+        Vertice inicio = encontraVertice(start).orElseThrow(
+                () -> new IllegalArgumentException("Vertice " + start + " não encontrado."));
+
+        //2º verificando in e out degree
+        for(Vertice vertice : vertices){
+            if(vertice.getInDegree() == 0 || vertice.getOutDegree() == 0){
+                //Tentei utilizar grau nesse if de cima, mas por algum motivo ele tava dando resultados errados, daí voltei pro in e out
+                System.out.println("Grafo DESconexo!");
+                System.out.println("Nome:" + vertice.getNome());
+                System.out.println(vertice.getOutDegree());
+                System.out.println(vertice.getInDegree());
+                System.out.println("Grau:" + vertice.getGrau());
+                return false;
+            }
+        } 
+
+        List<String> caminhada = dfsWithoutRecursion(inicio.getNome());
+
+
+        // OBS: A CAMINHADA TEM QUE SER PARA TODOS OS VÉRTICES!!
+        // imagina que do vértice 1 ele consegue se conectar com todos, mas o vértice 2 não (com grafo dirigido)
+        // Ajustar para percorrer a caminhada em todos os vértices depois:
+        if(vertices.size() != caminhada.size()){
+            System.out.println("Grafo DESconexo!");
+            return false;
+        }
+
+        // Ideia de colocar tudo num if só: (esqueci que tinha que ver o in e out de todos os vértices
+//        if(inicio.getInDegree() == 0 || inicio.getOutDegree() == 0 || vertices.size() != caminhada.size()){
+//            System.out.println("Grafo DESconexo!");
+//            return false;
+//        }
+
+        System.out.println("Grafo CONexo!");
+        return true;
+    }
+
     @Override
     public String toString() {
         return """
