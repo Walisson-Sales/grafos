@@ -27,5 +27,8 @@ public class Main {
         grafo.dfsWithRecursion("1","4");
         System.out.println("------------------------");
         grafo.descobreConexo("1");
+        System.out.println("------------------------");
+        System.out.println("BSF:");
+        grafo.bfsWithoutRecursion("1");
     }
 }

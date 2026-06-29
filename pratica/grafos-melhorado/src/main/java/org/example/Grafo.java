@@ -675,6 +675,64 @@ public class Grafo {
         return true;
     }
 
+    // ------------------------------------------------------------------------------------
+    // Implementação da busca em largura
+
+    // todo: Tranformar em busca em largura usando lista (FIFO) ao invés de pilha (LIFO)
+
+    public List<String> bfsWithoutRecursion(String start, String end) {
+        // Criação das variáveis
+        Queue<String> fila = new LinkedList<>();
+        Set<String> isVisited = new HashSet<>();
+        fila.add(start); // Push - como tava no dsf-, coloca no COMEÇO, por isso tem que ser add (pra por no FINAL da fila)
+        List<String> caminhoPercorrido = new ArrayList<>();
+
+        // lógica:
+        System.out.println("Construção do percurso:");
+        while (!fila.isEmpty()) {
+            String current = fila.poll(); // Aqui tanto pop quanto RemoveFirst funcionavam, mas decidi usar poll
+            // (pelo o que eu vi, poll é mais usado para fila. e não fiz o tratamento do null pq nessa caso não vai retornar null
+            if (isVisited.contains(current)) {
+                continue;
+            }
+            isVisited.add(current);
+
+            System.out.print(current + ", ");
+            caminhoPercorrido.add(current);
+
+            if (end != null && !end.isEmpty() && current.equals(end)) {
+                System.out.println("Destino '" + end + "' encontrado! Busca encerrada.");
+                System.out.println(caminhoPercorrido);
+                return caminhoPercorrido;
+            }
+
+            Vertice verticeAtual = encontraVertice(current).orElseThrow(
+                    () -> new IllegalArgumentException("Vertice " + current + " não encontrado."));
+            for (Vertice dest : verticeAtual.getAdjacencias()) {
+                if (!isVisited.contains(dest.getNome()))
+                    fila.add(dest.getNome());
+            }
+        }
+        // Retorna lista vazia quando não há caminho possível até o destino
+        if (end != null && !end.isEmpty()) {
+            System.out.println("\nDestino '" + end + "' inalcançável a partir de " + start );
+            return new ArrayList<>();
+        }
+
+        // Caminhada completa
+        System.out.println("Caminhada completa finalizada");
+        System.out.println(caminhoPercorrido);
+        return caminhoPercorrido;
+    }
+
+    // Sobrecarga do métod0 para deixar o end como opcional
+    public List<String> bfsWithoutRecursion(String start) {
+        // usando recursividade, passando só o start e deixando o end vazio.
+        return bfsWithoutRecursion(start, "");
+    }
+
+    //------------------------------------------------------------------------------------
+    
     @Override
     public String toString() {
         return """
