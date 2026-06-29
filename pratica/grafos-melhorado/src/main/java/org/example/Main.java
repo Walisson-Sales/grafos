@@ -30,5 +30,8 @@ public class Main {
         System.out.println("------------------------");
         System.out.println("BSF:");
         grafo.bfsWithoutRecursion("1");
+        System.out.println("------------------------");
+        System.out.println("Busca gulosa");
+        grafo.buscaGulosa("1", "3");
     }
 }

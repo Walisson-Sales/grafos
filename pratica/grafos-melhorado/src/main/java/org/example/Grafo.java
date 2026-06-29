@@ -732,7 +732,72 @@ public class Grafo {
     }
 
     //------------------------------------------------------------------------------------
-    
+    // Métod0 greendy search
+
+    // todo: fazer a busca gulosa: caminho percorrido através do vértice de menor peso
+
+    /*
+        1 var para guardar a soma total dos pesos
+        1 verificador pra ver o menor peso
+        SABER AS ARESTAS de cada vértice
+     */
+
+    // TERMINAR DEPOIS!!
+    public boolean buscaGulosa(String start, String end) {
+        // Criação das variáveis
+        Set<String> isVisited = new HashSet<>();
+        List<String> caminhoPercorrido = new ArrayList<>();
+        Vertice inicio = encontraVertice(start).orElseThrow(
+                () -> new IllegalArgumentException("Vertice " + start + " não encontrado."));
+        Vertice destino = encontraVertice(end).orElseThrow(
+                () -> new IllegalArgumentException("Vertice " + end + " não encontrado."));
+
+        String current = inicio.getNome();
+
+        double soma = 0.0;
+
+        // lógica:
+        System.out.println("Construção do percurso:");
+        while (current != null) {
+            if (isVisited.contains(current)) {
+                continue;
+            }
+            isVisited.add(current);
+
+            System.out.print(current + ", ");
+            caminhoPercorrido.add(current);
+
+            if (end != null && !end.isEmpty() && current.equals(end)) {
+                System.out.println("\nDestino '" + end + "' encontrado! Busca encerrada.");
+                System.out.println("Caminho: " + caminhoPercorrido + " | Custo Total: " + soma);
+                return true;
+            } // aqui veririca se chegou do destino
+
+            double menorPeso = Double.MAX_VALUE;
+            Aresta arestaMaisBarata = null;
+            for (Aresta aresta : arestas){
+                if (!isVisited.contains(destino)) {
+                    if(aresta.getVerticeOrigem().equals(current)){
+                        if(aresta.getPeso() < menorPeso){
+                            menorPeso = aresta.getPeso();
+                            arestaMaisBarata = aresta;
+                        }
+
+                    }
+                }
+            } // Verifica todas as arestas e procura as que tem como origem o vértice em questão
+            if (arestaMaisBarata != null) {
+                soma += menorPeso;
+                current = arestaMaisBarata.getVerticeDestino().getNome();
+            } else {
+                current = null; // Beco sem saída
+            }
+        }
+        // Retorna lista vazia quando não há caminho possível até o destino
+        System.out.println("\nDestino '" + end + "' inalcançável a partir de " + start);
+        return false;
+    }
+
     @Override
     public String toString() {
         return """
