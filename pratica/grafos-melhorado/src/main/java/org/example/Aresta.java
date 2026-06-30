@@ -12,13 +12,13 @@ public class Aresta {
     private String nome;
     private Vertice verticeOrigem;
     private Vertice verticeDestino;
-    private double peso;
+    private Integer peso;
 
     //Construtor para arestas sem nome e sem peso
     public Aresta(Vertice v1, Vertice v2) {
         this.verticeOrigem = v1;
         this.verticeDestino = v2;
-        this.peso = 1.0;
+        this.peso = 1;
     }
 
     // Construtor para arestas sem peso
@@ -26,11 +26,11 @@ public class Aresta {
         this.nome = nome;
         this.verticeOrigem = v1;
         this.verticeDestino = v2;
-        this.peso = 1.0;
+        this.peso = 1;
     }
 
     // Construtor para arestas com peso e sem nome
-    public Aresta(Vertice v1, Vertice v2, double peso) {
+    public Aresta(Vertice v1, Vertice v2, Integer peso) {
         this.verticeOrigem = v1;
         this.verticeDestino = v2;
         this.peso = peso;

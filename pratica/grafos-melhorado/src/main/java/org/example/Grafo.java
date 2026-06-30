@@ -28,22 +28,22 @@ public class Grafo {
     }
 
     public void addAresta(String nomeVertice1, String nomeVertice2) {
-        arestas.add(criaAresta("", nomeVertice1, nomeVertice2, 1.0));
+        arestas.add(criaAresta("", nomeVertice1, nomeVertice2, 1));
     }
 
     public void addAresta(String nomeAresta, String nomeVertice1, String nomeVertice2) {
-        arestas.add(criaAresta(nomeAresta, nomeVertice1, nomeVertice2, 1.0));
+        arestas.add(criaAresta(nomeAresta, nomeVertice1, nomeVertice2, 1));
     }
 
-    public void addAresta(String nomeVertice1, String nomeVertice2, double peso) {
+    public void addAresta(String nomeVertice1, String nomeVertice2, Integer peso) {
         arestas.add(criaAresta("", nomeVertice1, nomeVertice2, peso));
     }
 
-    public void addAresta(String nomeAresta, String nomeVertice1, String nomeVertice2, double peso) {
+    public void addAresta(String nomeAresta, String nomeVertice1, String nomeVertice2, Integer peso) {
         arestas.add(criaAresta(nomeAresta, nomeVertice1, nomeVertice2, peso));
     }
 
-    private Aresta criaAresta(String nomeAresta, String nomeVertice1, String nomeVertice2, double peso) {
+    private Aresta criaAresta(String nomeAresta, String nomeVertice1, String nomeVertice2, Integer peso) {
         Vertice v1 = encontraVertice(nomeVertice1).orElseThrow(
                 () -> new IllegalArgumentException("Vertice " + nomeVertice1 + " não encontrado."));
         Vertice v2 = encontraVertice(nomeVertice2).orElseThrow(
@@ -797,6 +797,81 @@ public class Grafo {
         System.out.println("\nDestino '" + end + "' inalcançável a partir de " + start);
         return false;
     }
+
+    //------------------------------------------------------------------------------------
+    /*
+    // Greedy search corrigida! - do professor:
+    public List<String> greedySearch(String nomeVerticeOrigem, String nomeVerticeDestino) {
+        List<Vertice> verticesVisitados = new ArrayList<>();
+        int comprimentoCaminho = 0;
+
+        Vertice verticeOrigem = encontraVertice(nomeVerticeOrigem).orElseThrow();
+        Vertice verticeDestino = encontraVertice(nomeVerticeDestino).orElseThrow();
+
+        verticesVisitados.add(verticeOrigem);
+        Vertice atual = verticeOrigem;
+
+        while (!atual.equals(verticeDestino)) {
+            Vertice verticeAlvo = atual;
+
+            // Otimização: Pegamos direto os vizinhos sem iterar sobre arestas do grafo
+            // inteiro
+            List<Vertice> adjacencias = verticeAlvo.getAdjacencias();
+            if (adjacencias == null || adjacencias.isEmpty()) {
+                System.out.println("Caminho não encontrado. Busca falhou em: " + atual.getNome());
+                return null;
+            }
+
+            // Busca a aresta não percorrida com o menor peso baseada nos vizinhos do
+            // vértice atual
+            List<Aresta> arestasVizinhas = new ArrayList<>();
+            for (Vertice vizinho : adjacencias) {
+                if (!verticesVisitados.contains(vizinho)) {
+                    arestasVizinhas.addAll(obtemArestasParaVizinho(verticeAlvo, vizinho));
+                }
+            }
+
+            // Se não houver arestas vizinhas, significa que não há caminho para o destino
+            if (arestasVizinhas.isEmpty()) {
+                System.out.println("Caminho não encontrado. Busca falhou em: " + atual.getNome());
+                return null;
+            }
+
+            // Pega a aresta com o menor peso
+            Aresta melhorAresta = arestasVizinhas.stream()
+                    .min(Comparator.comparing(Aresta::getPeso))
+                    .orElseThrow();
+
+            comprimentoCaminho += melhorAresta.getPeso() != null ? melhorAresta.getPeso() : 0;
+
+            atual = obtemVerticeOposto(melhorAresta, verticeAlvo);
+            verticesVisitados.add(atual);
+
+            System.out.println("Percorrendo aresta " + melhorAresta.getNome() +
+                    " (peso " + melhorAresta.getPeso() +
+                    ") para o vértice " + atual.getNome());
+        }
+
+        List<String> nomesVisitados = verticesVisitados.stream().map(Vertice::getNome).toList();
+
+        System.out.println("Destino " + verticeDestino.getNome() + " encontrado! Busca concluída com sucesso.");
+        System.out.println("Caminho: " + String.join(" -> ", nomesVisitados));
+        System.out.println("Comprimento do caminho: " + comprimentoCaminho);
+
+        return nomesVisitados;
+    }
+
+    private List<Aresta> obtemArestasParaVizinho(Vertice atual, Vertice vizinho) {
+        return arestas.stream()
+                .filter(a -> (a.getVerticeOrigem().equals(atual) && a.getVerticeDestino().equals(vizinho)) ||
+                        (!eDirigido && a.getVerticeDestino().equals(atual) && a.getVerticeOrigem().equals(vizinho)))
+                .toList();
+    }
+
+    private Vertice obtemVerticeOposto(Aresta aresta, Vertice vertice) {
+        return aresta.getVerticeOrigem().equals(vertice) ? aresta.getVerticeDestino() : aresta.getVerticeOrigem();
+    }
+     */
 
     @Override
     public String toString() {

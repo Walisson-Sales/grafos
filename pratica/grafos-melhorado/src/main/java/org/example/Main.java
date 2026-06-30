@@ -5,10 +5,10 @@ public class Main {
         Grafo grafo = new Grafo(); //não dirigido
         grafo.adicionaVertices("5", "2", "3", "4", "1"); // ADICIONAR O 6 AQUI DEPOIS PRA VER SER É CONEXO!!
         grafo.addAresta("e1","1", "3", 5);
-        grafo.addAresta("e2", "1", "4", 5);
-        grafo.addAresta("e3", "2", "5", 5);
-        grafo.addAresta("e4", "3", "5", 5);
-        grafo.addAresta("e5", "4", "2", 5);
+        grafo.addAresta("e2", "1", "4", 15);
+        grafo.addAresta("e3", "2", "5", 2);
+        grafo.addAresta("e4", "3", "5", 9);
+        grafo.addAresta("e5", "4", "2", 11);
 
         System.out.println(grafo);
 
