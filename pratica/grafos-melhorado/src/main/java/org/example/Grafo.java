@@ -873,6 +873,98 @@ public class Grafo {
     }
      */
 
+    // Projeto final - linkedin analyser:
+    // 1º Algoritmo de DIJKSTRA:
+    public ResultadoDijkstra dijkstra(String start, String end) {
+        Vertice inicio = encontraVertice(start).orElseThrow(
+                () -> new IllegalArgumentException("Vertice " + start + " não encontrado."));
+        Vertice destino = encontraVertice(end).orElseThrow(
+                () -> new IllegalArgumentException("Vertice " + end + " não encontrado."));
+
+        // 1. Lista de distâncias
+        Map<String, Integer> distancias = new HashMap<>();
+        // 2. O caminho percorrido
+        Map<String, String> predecessores = new HashMap<>();
+        Set<String> isVisited = new HashSet<>();
+
+        // Inicializa todos os vértices com custo "Infinito", exceto a origem que custa 0
+        for (Vertice v : vertices) {
+            distancias.put(v.getNome(), Integer.MAX_VALUE);
+        }
+        distancias.put(start, 0);
+
+        // 3. A fila prioritária (PriorityQueue) - Ordena automaticamente pelo menor custo!
+        PriorityQueue<String> filaVip = new PriorityQueue<>(
+                Comparator.comparingInt(v -> distancias.get(v))
+        );
+        filaVip.add(start);
+
+        System.out.println("Iniciando mapeamento de rotas (Dijkstra)...");
+
+        while (!filaVip.isEmpty()) {
+            String current = filaVip.poll(); // Tira sempre o mais barato da fila
+
+            // Veirifica se já passou pelo vértice atual
+            if (isVisited.contains(current)) continue;
+            isVisited.add(current);
+
+            // Se o mais barato for o destino, já achou a melhor rota.
+            if (current.equals(end)) break;
+
+            // procura as arestas exatamente como na Busca Gulosa
+            for (Aresta aresta : arestas) {
+                String origemAresta = aresta.getVerticeOrigem().getNome();
+                String destinoAresta = aresta.getVerticeDestino().getNome();
+
+                // Grafo Não-Direcionado!
+                String vizinho = null;
+                if (origemAresta.equals(current)) {
+                    vizinho = destinoAresta;
+                } else if (destinoAresta.equals(current)) {
+                    vizinho = origemAresta;
+                }
+
+                // Se achou um vizinho válido e ainda não visitado
+                if (vizinho != null && !isVisited.contains(vizinho)) {
+                    // Quanto custa chegar até mim + o pedágio dessa aresta?
+                    int novoCusto = distancias.get(current) + aresta.getPeso();
+
+                    // Se achei um caminho mais barato do que o anotado na lista
+                    if (novoCusto < distancias.get(vizinho)) {
+                        distancias.put(vizinho, novoCusto);
+                        predecessores.put(vizinho, current);
+                        filaVip.add(vizinho);
+                    }
+                }
+            }
+        }
+
+        // --- RECONSTRUINDO O CAMINHO ---
+        List<String> caminhoPercorrido = new ArrayList<>();
+
+        // Se o destino tem custo infinito, é inalcançável (Retorna custo -1)
+        if (distancias.get(end) == Integer.MAX_VALUE) {
+            System.out.println("Destino inalcançável!");
+            return new ResultadoDijkstra(new ArrayList<>(), -1);
+        }
+
+        // Segue o caminho de trás para frente (Destino -> Origem)
+        String passo = end;
+        while (passo != null) {
+            caminhoPercorrido.add(passo);
+            passo = predecessores.get(passo);
+        }
+
+        // Inverte a lista para ficar na ordem certa (Origem -> Destino)
+        Collections.reverse(caminhoPercorrido);
+
+        return new ResultadoDijkstra(caminhoPercorrido, distancias.get(end));
+    }
+
+    // Usando "record" pra conseguir retornar tanto o caminho quanto o custo de uma vez
+    // (Presente nas versões mais recentes do Java)
+    public record ResultadoDijkstra(List<String> caminho, int custo) {}
+
     @Override
     public String toString() {
         return """
