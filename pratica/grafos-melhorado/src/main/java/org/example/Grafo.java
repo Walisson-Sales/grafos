@@ -876,24 +876,27 @@ public class Grafo {
     // Projeto final - linkedin analyser:
     // 1º Algoritmo de DIJKSTRA:
     public ResultadoDijkstra dijkstra(String start, String end) {
-        Vertice inicio = encontraVertice(start).orElseThrow(
+        // Verificação dos vértices - se eles existem
+        encontraVertice(start).orElseThrow(
                 () -> new IllegalArgumentException("Vertice " + start + " não encontrado."));
-        Vertice destino = encontraVertice(end).orElseThrow(
+        encontraVertice(end).orElseThrow(
                 () -> new IllegalArgumentException("Vertice " + end + " não encontrado."));
 
-        // 1. Lista de distâncias
+        // Lista de distâncias
         Map<String, Integer> distancias = new HashMap<>();
-        // 2. O caminho percorrido
+        // Caminho percorrido
         Map<String, String> predecessores = new HashMap<>();
         Set<String> isVisited = new HashSet<>();
 
+        Integer infinite = 9999;
+
         // Inicializa todos os vértices com custo "Infinito", exceto a origem que custa 0
         for (Vertice v : vertices) {
-            distancias.put(v.getNome(), Integer.MAX_VALUE);
+            distancias.put(v.getNome(), infinite);
         }
         distancias.put(start, 0);
 
-        // 3. A fila prioritária (PriorityQueue) - Ordena automaticamente pelo menor custo!
+        // A fila prioritária (PriorityQueue) - Ordena automaticamente pelo menor custo!
         PriorityQueue<String> filaVip = new PriorityQueue<>(
                 Comparator.comparingInt(v -> distancias.get(v))
         );
@@ -943,7 +946,7 @@ public class Grafo {
         List<String> caminhoPercorrido = new ArrayList<>();
 
         // Se o destino tem custo infinito, é inalcançável (Retorna custo -1)
-        if (distancias.get(end) == Integer.MAX_VALUE) {
+        if (distancias.get(end) == infinite) {
             System.out.println("Destino inalcançável!");
             return new ResultadoDijkstra(new ArrayList<>(), -1);
         }
@@ -964,6 +967,17 @@ public class Grafo {
     // Usando "record" pra conseguir retornar tanto o caminho quanto o custo de uma vez
     // (Presente nas versões mais recentes do Java)
     public record ResultadoDijkstra(List<String> caminho, int custo) {}
+
+
+    // Precisei criar um get de arestas para poder usar na classe LinkedinAnalyzer
+    // Preferi não usar o lombok pq só precisei do getter para arestas e vertices
+    public List<Aresta> getArestas() {
+        return arestas;
+    }
+
+    public List<Vertice> getVertices() {
+        return vertices;
+    }
 
     @Override
     public String toString() {
